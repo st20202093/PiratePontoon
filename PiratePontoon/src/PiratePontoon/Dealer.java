@@ -36,8 +36,6 @@ public class Dealer extends JFrame {
 	private ArrayList<String> winner = new ArrayList<>();
 	
 	private int playersleft;
-	Card dcard1;
-	Card dcard2;
 	
 	// sets up the server GUI
 	public Dealer(int port, int playerNum, int roundNum) {
@@ -122,7 +120,7 @@ public class Dealer extends JFrame {
 			Deck.index++;
 			dhand.add(dcard1);
 			dhand.add(dcard2);
-			displayMessage("\nDealers Cards:\n" +dcard1.ToString() + ", " +dcard2.ToString());
+			displayMessage("\n\nDealers Cards:\n" +dcard1.ToString() + ", " +dcard2.ToString());
 
 			for (int i=1;i< counter;i++) {
 				
@@ -185,9 +183,16 @@ public class Dealer extends JFrame {
 			} //end for
 			// tells users dealer is the winner
 			if (winner.size() == 0) {
-				for (int i=1; i < counter; i++) {
-					sockServer[i].sendData("Dealer");
-				} //end for
+				if (CheckBust(dhand)) {
+					for (int i=1; i < counter; i++) {
+						sockServer[i].sendData("No winner");
+					} //end for
+				} //end if
+				else {
+					for (int i=1; i < counter; i++) {
+						sockServer[i].sendData("Dealer");
+					} //end for
+				} //end else
 			} //end if
 			// checks if max rounds have been played then clears arrayLists and begins next round
 			if (round < roundMax) {
